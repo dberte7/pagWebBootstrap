@@ -13,33 +13,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const worker = { firstName, lastName, email, department };
         workers.push(worker);
-        form.reset();
+        
         updateWorkersList();
         updateWorkersSummary();
+
+        form.reset();
     });
 
     function updateWorkersList() {
         workersList.innerHTML = '';
         workers.forEach(worker => {
             const li = document.createElement('li');
-            li.classList.add('list-group-item');
+            
             li.textContent = `${worker.firstName} ${worker.lastName}`;
             workersList.appendChild(li);
         });
     }
 
     function updateWorkersSummary() {
+        if (workers.length === 0) {
+            workersSummary.style.display = 'none';
+            return;
+        } else {
+            workersSummary.style.display = 'block';
+        }
+    
         const summary = workers.reduce((acc, worker) => {
             acc[worker.department] = (acc[worker.department] || 0) + 1;
             return acc;
         }, {});
-
-        workersSummary.innerHTML = '';
+    
+        workersSummary.innerHTML = '<h2>Resumen de Trabajadores por Departamento</h2>';
         for (const department in summary) {
             const li = document.createElement('li');
             li.classList.add('list-group-item');
             li.textContent = `${department}: ${summary[department]}`;
             workersSummary.appendChild(li);
         }
-    }
+    } 
 });
